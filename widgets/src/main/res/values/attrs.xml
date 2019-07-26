@@ -15,23 +15,29 @@
         <attr name="viewState" />
     </declare-styleable>
 
-
     <declare-styleable name="TabLayout">
+        <!--tab 文本的样式 一般定义在styles.xml-->
         <attr name="tabTextStyle" format="reference" />
+        <!--布局模式，滑动或固定-->
         <attr name="tabScrollFlag" format="enum">
             <enum name="fixed" value="1" />
             <enum name="scroll" value="0" />
         </attr>
-        <attr name="tabIndicatorWidth" format="enum">
+        <!--指示器模式-->
+        <attr name="tabIndicatorMode" format="enum">
+            <!--跟所在tab一样宽-->
             <enum name="matchView" value="0" />
+            <!--跟所在tab的内容一样宽-->
             <enum name="matchContent" value="1" />
+            <!--固定宽度，需要设置tabIndicatorWidth-->
             <enum name="fixed" value="2" />
         </attr>
-        <attr name="tabIndicatorWidthInDp" format="dimension" />
+        <attr name="tabIndicatorWidth" format="dimension" />
+        <!--指示器drawable 优先级高于tabIndicatorColor-->
         <attr name="tabIndicatorDrawable" format="reference" />
+        <attr name="tabIndicatorColor" format="color" />
         <attr name="tabItemPadding" format="dimension" />
         <attr name="tabSpace" format="dimension" />
-        <attr name="tabIndicatorColor" format="color" />
         <attr name="tabIndicatorHeight" format="dimension" />
     </declare-styleable>
 

@@ -26,25 +26,34 @@ public class TabLayout extends HorizontalScrollView implements ViewPager.OnPageC
         ViewPager.OnAdapterChangeListener {
 
     public static final String TAG = "TabLayout";
+    /**
+     * 指示器默认滚动时间
+     * The duration of the animation of the indicator
+     */
     public static final int DURATION_INDICATOR = 300;
     /**
-     * 可滑动布局
+     * Tab可滑动布局
+     * Scrollable layout
      */
     public static final int FLAG_SCROLL = 0;
     /**
      * 固定布局
+     * Fixed Layout
      */
     public static final int FLAG_FIXED = 1;
     /**
+     * 指示器宽度和所在tab的宽度保持一致
      * Indicator width is same as the selected child view
      */
     public static final int MATCH_VIEW = 0;
     /**
+     * 指示器宽度跟所在tab的文本宽度保持一致
      * Indicator width is same as the content width of the
      * selected child view
      */
     public static final int MATCH_CONTENT = 1;
     /**
+     * 指示器固定宽度，设置该值时需要指定{@link #mIndicatorWidth}
      * Indicator width is a fixed value
      */
     public static final int FIXED = 2;
@@ -53,14 +62,21 @@ public class TabLayout extends HorizontalScrollView implements ViewPager.OnPageC
     private LinearLayout mSlidingIndicator;
     private ImageView mIndicatorView;
 
+    /**
+     * tab之间的间距
+     * Margin of two child view
+     */
     private int mItemSpace;
+    /**
+     * tab本身的水平padding
+     */
     private int mItemPadding;
     private int mScrollFlag = FLAG_SCROLL;
     private int mDefTextStyleAttr;
     private Drawable mIndicatorDrawable;
     private int mIndicatorHeight = 4;
-    private int mIndicatorWidth = MATCH_CONTENT;
-    private int mIndicatorActualW;
+    private int mIndicatorMode = MATCH_CONTENT;
+    private int mIndicatorWidth;
 
     private int mSelectPosition;
     private AnimatorSet mMoveAnimatorSet;
@@ -103,12 +119,12 @@ public class TabLayout extends HorizontalScrollView implements ViewPager.OnPageC
                 mItemSpace = ta.getDimensionPixelOffset(attr, 0);
             } else if (R.styleable.TabLayout_tabScrollFlag == attr) {
                 mScrollFlag = ta.getInt(attr, FLAG_SCROLL);
-            } else if (R.styleable.TabLayout_tabIndicatorWidth == attr) {
-                mIndicatorWidth = ta.getInt(attr, MATCH_CONTENT);
+            } else if (R.styleable.TabLayout_tabIndicatorMode == attr) {
+                mIndicatorMode = ta.getInt(attr, MATCH_CONTENT);
             } else if (R.styleable.TabLayout_tabIndicatorDrawable == attr) {
                 mIndicatorDrawable = ta.getDrawable(attr);
-            } else if (R.styleable.TabLayout_tabIndicatorWidthInDp == attr) {
-                mIndicatorActualW = ta.getDimensionPixelOffset(attr, 10);
+            } else if (R.styleable.TabLayout_tabIndicatorWidth == attr) {
+                mIndicatorWidth = ta.getDimensionPixelOffset(attr, 10);
             }
         }
         ta.recycle();
@@ -245,15 +261,15 @@ public class TabLayout extends HorizontalScrollView implements ViewPager.OnPageC
         int[] now = getLeftAndRight(position);
         if (!anim) {
             FrameLayout.LayoutParams params = (LayoutParams) mIndicatorView.getLayoutParams();
-            if (mIndicatorWidth == MATCH_CONTENT) {
+            if (mIndicatorMode == MATCH_CONTENT) {
                 int offsetNow = getViewContentOffset(position);
                 mIndicatorView.setLeft(now[0] + offsetNow);
                 mIndicatorView.setRight(now[1] - offsetNow);
-            } else if (mIndicatorWidth == MATCH_VIEW) {
+            } else if (mIndicatorMode == MATCH_VIEW) {
                 mIndicatorView.setLeft(now[0]);
                 mIndicatorView.setRight(now[1]);
             } else {
-                int dif = (now[1] - now[0] - mIndicatorActualW) / 2;
+                int dif = (now[1] - now[0] - mIndicatorWidth) / 2;
                 mIndicatorView.setLeft(now[0] + dif);
                 mIndicatorView.setRight(now[1] - dif);
             }
@@ -269,19 +285,19 @@ public class TabLayout extends HorizontalScrollView implements ViewPager.OnPageC
             }
             ObjectAnimator animLeft;
             ObjectAnimator animRight;
-            if (mIndicatorWidth == MATCH_CONTENT) {
+            if (mIndicatorMode == MATCH_CONTENT) {
                 int offsetNow = getViewContentOffset(position);
                 animLeft = ObjectAnimator.ofInt(mIndicatorView, "left",
                         mIndicatorView.getLeft(), now[0] + mItemPadding + offsetNow);
                 animRight = ObjectAnimator.ofInt(mIndicatorView, "right",
                         mIndicatorView.getRight(), now[1] - mItemPadding - offsetNow);
-            } else if (mIndicatorWidth == MATCH_VIEW) {
+            } else if (mIndicatorMode == MATCH_VIEW) {
                 animLeft = ObjectAnimator.ofInt(mIndicatorView, "left",
                         mIndicatorView.getLeft(), now[0]);
                 animRight = ObjectAnimator.ofInt(mIndicatorView, "right",
                         mIndicatorView.getRight(), now[1]);
             } else {
-                int dif = (now[1] - now[0] - mIndicatorActualW) / 2;
+                int dif = (now[1] - now[0] - mIndicatorWidth) / 2;
                 animLeft = ObjectAnimator.ofInt(mIndicatorView, "left",
                         mIndicatorView.getLeft(), now[0] + dif);
                 animRight = ObjectAnimator.ofInt(mIndicatorView, "right",
@@ -350,7 +366,7 @@ public class TabLayout extends HorizontalScrollView implements ViewPager.OnPageC
         int offsetRight;
         if (v > 0) {
             View right = mSlidingIndicator.getChildAt(i + 1);
-            if (mScrollFlag == FLAG_FIXED && mIndicatorWidth == MATCH_CONTENT) {
+            if (mScrollFlag == FLAG_FIXED && mIndicatorMode == MATCH_CONTENT) {
                 if (contentOffsetLeft == 0 || contentOffsetRight == 0) {
                     contentOffsetLeft = getViewContentOffset(left);
                     contentOffsetRight = getViewContentOffset(right);
@@ -361,11 +377,18 @@ public class TabLayout extends HorizontalScrollView implements ViewPager.OnPageC
                 offsetLeft = (int) ((right.getLeft() - left.getLeft()) * v);
                 offsetRight = (int) ((right.getRight() - left.getRight()) * v);
             }
-            mIndicatorView.setLeft(left.getLeft() + offsetLeft);
-            mIndicatorView.setRight(left.getRight() + offsetRight);
+            int l = left.getLeft() + offsetLeft;
+            int r = left.getRight() + offsetRight;
+            if (mIndicatorMode == FIXED) {
+                int dif = (r - l - mIndicatorWidth) / 2;
+                l += dif;
+                r -= dif;
+            }
+            mIndicatorView.setLeft(l);
+            mIndicatorView.setRight(r);
             mIndicatorView.invalidate();
         } else {
-            if (mScrollFlag == FLAG_FIXED && mIndicatorWidth == MATCH_CONTENT) {
+            if (mScrollFlag == FLAG_FIXED && mIndicatorMode == MATCH_CONTENT) {
                 contentOffsetLeft = getViewContentOffset(left);
                 offsetLeft = left.getLeft() + contentOffsetLeft;
                 offsetRight = left.getRight() - contentOffsetLeft;
@@ -374,6 +397,11 @@ public class TabLayout extends HorizontalScrollView implements ViewPager.OnPageC
                 offsetRight = left.getRight();
             }
             contentOffsetLeft = contentOffsetRight = 0;
+            if (mIndicatorMode == FIXED) {
+                int dif = (offsetRight - offsetLeft - mIndicatorWidth) / 2;
+                offsetLeft += dif;
+                offsetRight -= dif;
+            }
             mIndicatorView.setLeft(offsetLeft);
             mIndicatorView.setRight(offsetRight);
             mIndicatorView.invalidate();
