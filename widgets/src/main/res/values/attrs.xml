@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="viewState" format="enum">
+        <enum name="CONTENT" value="0" />
+        <enum name="LOADING" value="1" />
+        <enum name="ERROR" value="2" />
+        <enum name="EMPTY" value="3" />
+        <enum name="NETWORK" value="4" />
+    </attr>
+    <declare-styleable name="MultiStateLayout">
+        <attr name="errorLayout" format="reference" />
+        <attr name="emptyLayout" format="reference" />
+        <attr name="loadLayout" format="reference" />
+        <attr name="networkLayout" format="reference" />
+        <attr name="viewState" />
+    </declare-styleable>
+
+
+    <declare-styleable name="TabLayout">
+        <attr name="tabTextStyle" format="reference" />
+        <attr name="tabScrollFlag" format="enum">
+            <enum name="fixed" value="1" />
+            <enum name="scroll" value="0" />
+        </attr>
+        <attr name="tabIndicatorWidth" format="enum">
+            <enum name="matchView" value="0" />
+            <enum name="matchContent" value="1" />
+            <enum name="fixed" value="2" />
+        </attr>
+        <attr name="tabIndicatorWidthInDp" format="dimension" />
+        <attr name="tabIndicatorDrawable" format="reference" />
+        <attr name="tabItemPadding" format="dimension" />
+        <attr name="tabSpace" format="dimension" />
+        <attr name="tabIndicatorColor" format="color" />
+        <attr name="tabIndicatorHeight" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="TitleBar">
+        <attr name="title" format="string" />
+        <attr name="icon" format="reference" />
+        <attr name="menuText" format="string" />
+        <attr name="menuIcon" format="reference" />
+        <attr name="titleTextSize" format="dimension" />
+        <attr name="titleTextColor" format="color" />
+        <attr name="menuTextSize" format="dimension" />
+        <attr name="menuTextColor" format="color" />
+        <attr name="titleGravity" format="enum">
+            <enum name="CENTER" value="0" />
+            <enum name="START" value="1" />
+            <enum name="END" value="2" />
+        </attr>
+    </declare-styleable>
+</resources>

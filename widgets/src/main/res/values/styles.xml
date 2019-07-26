@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="defStyleMultiStateLayout">
+        <item name="errorLayout">@layout/layout_def_error</item>
+        <item name="emptyLayout">@layout/layout_def_empty</item>
+        <item name="loadLayout">@layout/layout_def_loading</item>
+        <item name="networkLayout">@layout/layout_def_network</item>
+    </style>
+</resources>

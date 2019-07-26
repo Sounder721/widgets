@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--相关属性：-->
+<!--    color:-->
+<!--        colorLoadingStart、colorLoadingEnd-->
+<!--    integer:-->
+<!--        loading_animation_duration-->
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+                 xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="24dp"
+            android:height="24dp"
+            android:viewportHeight="100"
+            android:viewportWidth="100">
+
+            <group
+                android:name="g1"
+                android:pivotX="25"
+                android:pivotY="50">
+                <path
+                    android:name="p1"
+                    android:fillColor="@color/colorLoadingStart"
+                    android:pathData="M25,50m-10,0a10,10 0 1 1 25,0a10,10 0 1 1 -25,0"/>
+            </group>
+
+
+            <group
+                android:name="g2"
+                android:pivotX="70"
+                android:pivotY="50">
+                <path
+                    android:name="p2"
+                    android:fillColor="@color/colorLoadingStart"
+                    android:pathData="M70,50m-10,0a10,10 0 1 1 25,0a10,10 0 1 1 -25,0"/>
+            </group>
+        </vector>
+    </aapt:attr>
+
+    <target
+        android:name="g1">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="@integer/loading_animation_duration"
+                    android:interpolator="@android:interpolator/accelerate_decelerate"
+                    android:propertyName="scaleX"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:valueFrom="0.5"
+                    android:valueTo="1"/>
+                <objectAnimator
+                    android:duration="@integer/loading_animation_duration"
+                    android:interpolator="@android:interpolator/accelerate_decelerate"
+                    android:propertyName="scaleY"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:valueFrom="0.5"
+                    android:valueTo="1"/>
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target
+        android:name="g2">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="@integer/loading_animation_duration"
+                    android:interpolator="@android:interpolator/accelerate_decelerate"
+                    android:propertyName="scaleX"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:valueFrom="1"
+                    android:valueTo="0.5"/>
+                <objectAnimator
+                    android:duration="@integer/loading_animation_duration"
+                    android:interpolator="@android:interpolator/accelerate_decelerate"
+                    android:propertyName="scaleY"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:valueFrom="1"
+                    android:valueTo="0.5"/>
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="p1">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="@integer/loading_animation_duration"
+                android:interpolator="@android:interpolator/accelerate_decelerate"
+                android:propertyName="fillColor"
+                android:repeatCount="infinite"
+                android:repeatMode="reverse"
+                android:valueFrom="@color/colorLoadingStart"
+                android:valueTo="@color/colorLoadingEnd"/>
+        </aapt:attr>
+    </target>
+
+    <target android:name="p2">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="@integer/loading_animation_duration"
+                android:interpolator="@android:interpolator/accelerate_decelerate"
+                android:propertyName="fillColor"
+                android:repeatCount="infinite"
+                android:repeatMode="reverse"
+                android:startOffset="200"
+                android:valueFrom="@color/colorLoadingStart"
+                android:valueTo="@color/colorLoadingEnd"/>
+        </aapt:attr>
+    </target>
+</animated-vector>
