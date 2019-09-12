@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ViewTreeObserver;
+import android.widget.TextView;
 
 import com.github.sounder.widgets.TabLayout;
 
@@ -29,15 +31,31 @@ public class MainActivity extends AppCompatActivity {
         fragments.add(new MyFragment());
         fragments.add(new MyFragment());
         fragments.add(new MyFragment());
-        fragments.add(new MyFragment());
-        fragments.add(new MyFragment());
-        fragments.add(new MyFragment());
-        fragments.add(new MyFragment());
-        fragments.add(new MyFragment());
-        fragments.add(new MyFragment());
         MyPagerAdapter myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), fragments);
         mViewPager.setAdapter(myPagerAdapter);
+
+        mTabLayout.setOnTabChangeListener(new TabLayout.OnTabChangeListener() {
+            @Override
+            public void onTabSelect(TextView view, int position) {
+                view.getPaint().setFakeBoldText(true);
+            }
+
+            @Override
+            public void onTabUnSelect(TextView view, int position) {
+                view.getPaint().setFakeBoldText(false);
+            }
+        });
+
         mTabLayout.setupWithViewPager(mViewPager);
+
+
+        mTabLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mViewPager.setCurrentItem(1);
+                mTabLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
 
     }
 
@@ -67,7 +85,11 @@ public class MainActivity extends AppCompatActivity {
         @Nullable
         @Override
         public CharSequence getPageTitle(int position) {
-            return mFragmentList.get(position).getClass().getSimpleName();
+            String s = "";
+            for (int i = 0; i < position; i++) {
+                s += "000";
+            }
+            return mFragmentList.get(position).getClass().getSimpleName() + s;
         }
     }
 }
