@@ -7,6 +7,9 @@
         <enum name="EMPTY" value="3" />
         <enum name="NETWORK" value="4" />
     </attr>
+
+    <attr name="text" format="string" />
+
     <declare-styleable name="MultiStateLayout">
         <attr name="errorLayout" format="reference" />
         <attr name="emptyLayout" format="reference" />
@@ -55,5 +58,17 @@
             <enum name="START" value="1" />
             <enum name="END" value="2" />
         </attr>
+    </declare-styleable>
+
+    <declare-styleable name="Label">
+        <attr name="text" />
+        <attr name="textSize" format="dimension" />
+        <attr name="textColor" format="color" />
+        <attr name="textStyle" format="enum">
+            <enum name="NORMAL" value="0" />
+            <enum name="FAKE_BOLD" value="1" />
+            <enum name="BOLD" value="2" />
+        </attr>
+        <attr name="spacingMulti" format="float" />
     </declare-styleable>
 </resources>
